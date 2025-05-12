@@ -1,6 +1,6 @@
 # notes, copies of articles, etc.
-.txt
-./articles/
+*.txt
+articles/
 eda.qmd
 
 # History files

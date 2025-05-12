@@ -1,0 +1,66 @@
+"variable_name","description"
+"FIPStxt","State+county Federal Information Processing System (FIPS) code, in text format"
+"State","State postal abbreviation"
+"County_Name","County or county-equivalent name"
+"Metro2023","Classifications of counties are based on the Office of Management and Budget's (OMB) definition of Metropolitan Statistical Areas as defined in the July 2023 Bulletin Number 23-01. Metropolitan statistical areas have at least one urban area of 50,000 or more population, plus adjacent territory that has a high degree of social and economic integration with the core as measured by commuting ties. 0 = counties that do not belong to metropolitan statistical areas 1 = counties that belong to metropolitan statistical areas. The OMB produced 2023 Core Based Statistical Area designations for Connecticut's Planning Region geographies (FIPS codes 09110 to 09190) but not for Connecticut's county geographies (FIPS codes 09001 to 09015). USDA, Economic Research Service (ERS) treated Litchfield County, CT and Windham County, CT as nonmetropolitan and all other Connecticut counties as metropolitan for the purposes of this data product. This treatment is reflected in the Metro2023 variable in this data product."
+NA,NA
+"Economic Typology Codes",NA
+"High_Farming_2025","High farming-concentration counties: Farming accounted for at least 20 percent of the county's earnings or 17 percent of the county's jobs averaged over 2019, 2021, and 2022. 0 = no; 1 = yes; 99 = not available"
+"High_Mining_2025","High mining-concentration counties: Mining accounted for at least 11 percent of the county's earnings or 7 percent of the county's jobs averaged over 2019, 2021, and 2022.  0 = no; 1 = yes; 99 = not available"
+"High_Manufacturing_2025","High manufacturing-concentration counties: Manufacturing accounted for at least 25 percent of the county's earnings or 17 percent of the county's jobs averaged over 2019, 2021, and 2022.  0 = no; 1 = yes; 99 = not available"
+"High_Government_2025","High government-concentration counties: Federal and State Government accounted for at least 13 percent of the county's earnings or 8 percent of the county's jobs averaged over 2019, 2021, and 2022.  0 = no; 1 = yes; 99 = not available"
+"High_Recreation_2025","High recreation-concentration counties: Weighted z-score of recreation earnings, jobs, and housing greater than or equal to 0.67. See the documentation on the ERS website for more information (Data Products > County Typology Codes > Documentation).  0 = no; 1 = yes; 99 = not available"
+"Nonspecialized_2025","Nonspecialized counties: Counties were not classified as having a 'high concentration' in farming, mining, manufacturing, government, or recreation.  0 = no; 1 = yes; 99 = not available"
+"Industry_Dependence_2025","Mutually exclusive economic dependence county indicator: Indicates the industry with a weighted z-score greater than or equal to '1' and that is higher than any other industry's weighted z-score. See the Industry Dependence Code Thresholds section of the documentation on the ERS website for more information (Data Products > County Typology Codes > Documentation). 0 = Not dependent; 1 = Farming dependent; 2 = Mining dependent; 3 = Manufacturing dependent; 4 = Government dependent; 5 = Recreation dependent; 99 = not available"
+NA,NA
+"Demographic Typology Codes",NA
+"Low_PostSecondary_Ed_2025","Low post-secondary education counties: At least 57 percent of residents ages 25 to 64 did not have any post-secondary education in 2018–22 5-year American Community Survey (ACS). 0 = no; 1 = yes; 99 = not available"
+"Low_Employment_2025","Low employment counties: Less than 63 percent of residents ages 25 to 54 were employed in 2018–22 5-year ACS. 0 = no; 1 = yes; 99 = not available"
+"Population_Loss_2025","Population loss counties: Number of residents declined from 2000 to 2010 and from 2010 to 2020, based on Decennial Census data. 0 = no; 1 = yes; 99 = not available"
+"Housing_Stress_2025","Housing stress counties: At least 29 percent of owner- and renter-occupied housing units had at least one of the following conditions: 1) lacking complete plumbing facilities, 2) lacking complete kitchen facilities, 3) with 1.01 or more occupants per room, 4) selected monthly owner costs as a percentage of household income greater than 30 percent, and 5) gross rent as a percentage of household income greater than 30 percent. As defined in table B25123 of the 2018–22 5-year ACS. 0 = no; 1 = yes; 99 = not available"
+"Retirement_Destination_2025","Retirement destination counties: Number of residents ages 55 to 74 increased by at least 15 percent from 2010 to 2020 because of migration, based on data from the University of Wisconsin - Madison's Applied Population Laboratory. 0 = no; 1 = yes; 99 = not available"
+"Persistent_Poverty_1721","Persistent poverty counties: Poverty rate was 20 percent or higher in the 1990 and 2000 Decennial Censuses and in the 2007–11 and 2017–21 5-year ACS. See the Poverty Area Measures data product on the ERS website for more information (Data Products > Poverty Area Measures) for more information. -1 = not determined; 0 = no; 1 = yes; 99 = not available"
+NA,NA
+"Data sources",NA
+"Economic Typology Codes","The economic typology codes include the set of six high industry concentration codes and the industry dependence code. These codes are based primarily on labor and proprietors' earnings and jobs data from the Bureau of Economic Analysis' (BEA) Regional Economic Accounts, released in November 2023. Non-publicly available, unsuppressed earnings and jobs estimates are used for counties in 40 States and Washington, D.C. Estimates for counties in Florida, Hawaii, Kentucky, Louisiana, Massachusetts, Michigan, New Hampshire, North Carolina, Rhode Island, and Vermont come from the publicly available BEA files where possible, and are supplemented with alternative data if values for 2019, 2021, and 2022 are suppressed. If complete data for 2019, 2021, and 2022 are not available, the following alternatives are used: 1) If one or two of the three years (2019, 2021, or 2022) used to calculate the 3-year average are suppressed, then a single year or a two-year average of the available years of data is used. 2) If data for 2019, 2021, and 2022 are suppressed, the most recent single year of BEA data going back to and including 2013 is used. 3) If no BEA data are available from 2013 onward, the following alternatives are used. a) Available subindustry BEA earnings data from 2019, 2021, and 2022 are summed and the shares are averaged to create an underestimate of earnings for the high mining, manufacturing, and recreation concentration codes and industry dependence code. b) Employment data from the S2403 table of the 2018–22 ACS are used for the high mining, manufacturing, and recreation concentration codes and industry dependence code. c) For the High Government Concentration code, BEA Federal, State, and local government earnings and jobs from 2019, 2021, and 2022 are used. d) Separate thresholds are calculated for counties that use ACS employment data and for counties that use Federal, State, and local government data for the High Government Concentration code. e) For the Industry Dependence code, an alternative method is used to determine if a county is government dependent. In cases where the State government (alone) earnings and jobs are not available in the BEA data, counties’ Federal and State government earnings and jobs shares are estimated by subtracting the nonmetro mean share of earnings and jobs in local government from the county’s share of earnings and jobs in Federal, State, and local government. State and local government earnings and employment are available as a combined industry in the BEA data and neither Federal government nor the combined State and local industry are suppressed for any counties."
+NA,"Farm earnings and employment refers to the earnings and jobs of sole proprietors, partners, and hired laborers engaged in the direct production of agricultural commodities, either livestock or crops."
+NA,"Mining earnings and employment refers to the earnings and jobs from mining, quarrying, oil and gas extraction, and support activities for mining."
+NA,"Manufacturing earnings and employment refers to the earnings and jobs from durable (e.g. wood products, primary metals, machinery, etc.) and nondurable (e.g. food, apparel, chemical, etc.) goods manufacturing."
+NA,"Government earnings and employment refers to the earnings and jobs of Federal civilian and State Government employees."
+NA,"Recreation earnings and employment refer to the earnings and jobs from arts, entertainment, and recreation, accommodation and food services, and real estate and rental and leasing services."
+NA,NA
+"County coverage",NA
+"County typology codes are assigned to all counties for which data are enumerated in the data source files. The number of counties with available data varies by data source (Bureau of Economic Analysis (BEA) vs. Census Bureau) and by year. The BEA combines Virginia's independent cities with nearby counties and reports data for the combined area only. The BEA also combines Maui, HI and Kalawao, HI into a single geographic area. The Economic Typology Codes are based on the earnings and jobs shares of these county/city combinations, but codes for the combined counties and cities are reported separately in the data file. The county/city combinations used by the BEA are listed below as are the Census county names and FIPS codes that are used to report the Economic Typology Codes. BEA data and Census data prior to the 2018–22 ACS report data for Connecticut's eight counties, while Census data from 2022 onward report data for Connecticut's nine planning regions. For the purposes of this data product, Litchfield County, CT and Windham County, CT were designated by ERS as nonmetropolitan and all other counties in Connecticut were designated as metropolitan.
+
+The population loss code relies on Decennial Census data from 2000, 2010, and 2020. Counties that did not exist in 2000 or 2010 are not assigned population loss codes. Bedford city, VA was added to Bedford County, VA in 2013 and Clifton Forge city, VA was added to Alleghany County, VA in 2001. The population data for these county/city combinations were summed in the Decennial Census years prior to their mergers to create a consistent geography for the population loss county code. See the Census Bureau's website for more information on changes to county geographies (https://www.census.gov/programs-surveys/geography/technical-documentation/county-changes.2020.html). The persistent poverty code follows the methodology outlined in ERS' Poverty Area Measures data product (https://www.ers.usda.gov/data-products/poverty-area-measures).",NA
+NA,NA
+"Bureau of Economic Analysis (BEA) FIPS","BEA county name"
+"15901","Maui & Kalawao, HI"
+"51901","Albemarle & Charlottesville city, VA"
+"51903","Alleghany & Covington city, VA"
+"51907","Augusta, Staunton, & Waynesboro, VA"
+"51911","Campbell & Lynchburg city, VA"
+"51913","Caroll & Galax city, VA"
+"51918","Dinwiddie, Colonial Heights, & Petersburg city, VA"
+"51919","Fairfax, Fairfax city, & Falls Church city, VA"
+"51921","Frederick & Winchester city, VA"
+"51923","Greensville & Emporia city, VA"
+"51929","Henry & Martinsville city, VA"
+"51931","James city & Williamsburg, VA"
+"51933","Montgomery & Radford city, VA"
+"51939","Pittsylvania & Danville city, VA"
+"51941","Prince George & Hopewell city, VA"
+"51942","Prince William, Manassas, & Manassas Park city, VA"
+"51944","Roanoke & Salem city, VA"
+"51945","Rockbridge, Buena Vista, & Lexington city, VA"
+"51947","Rockingham & Harrisonburg city, VA"
+"51949","Southampton & Franklin city, VA"
+"51951","Spotsylvania & Fredericksburg city, VA"
+"51953","Washington & Bristol city, VA"
+"51955","Wise & Norton city, VA"
+"51958","York & Poquoson city, VA"
+NA,NA
+NA,NA
+"For more detailed information on the County Typology Codes, see the USDA, Economic Research Service website documentation page under Home > Data Products > County Typology Codes > Documentation.",NA
+"Source: USDA, Economic Research Service, County Typology Codes data product, updated April 2025.",NA
+"Contact: Austin Sanders.",NA
