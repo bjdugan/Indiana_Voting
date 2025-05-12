@@ -2,6 +2,13 @@
 Facts, figures, and data on voting and vote center adoption in Indiana
 
 ## Overview
+This project contains several R files:  
+ - **import.R** retrieves and cleans data from sources listed below.  
+ - **IN_counties.geojson** spatial data for mapping Indiana counties.  
+ - **registration_turnout2010-2024.csv** data scraped from PDFs for Indiana general elections beginning in 2010. Municipal election data are only available for recent years, and pre-2010 data do not appear to be available. Election year, turnout and absenteee turnout rates, and counts of registered, voting, and absentee voters are included.  
+ - **vote_center_adoption.csv** table read from IN Secretary of State website that includes the county and year vote centers were adopted over traditional precinct-based voting.  
+ - **county_types.csv** (Not currently used) data from the US Department of Agriculture's Economic Research Service that describe counties based on prevalent industry and a variety of sociodemographic factors.  
+ 
 
 ## Background
 In 2024, Monroe County, Indiana, began a study to evaluate the costs and logistics of adopting vote centers within the county and seeks public feedback through May 19th, 2025. In late April, 2025, Indiana Governor Mike Braun signed legislation that may eventually result in all Indiana counties adopting vote centers. This project explores publicly available voter data and claims regarding improved access. 
@@ -12,6 +19,7 @@ In 2024, Monroe County, Indiana, began a study to evaluate the costs and logisti
  - Indiana Vote Center adoption [data](https://www.in.gov/sos/elections/voter-information/ways-to-vote/vote-centers/)  
  - [FAQ](https://www.in.gov/sos/elections/voter-information/ways-to-vote/vote-centers/vote-center-information/) and background about Vote Centers in Indiana  
  - Spatial data [API](https://www.indianamap.org/datasets/INMap::county-boundaries-of-indiana-current/about)  
+ - USDA ERS County [Typologies](https://www.ers.usda.gov/data-products/county-typology-codes) (not used outside exploratory analysis)  
 
 ### News
  - [Coverage](https://bsquarebulletin.com/april-7-public-hearing-kicks-off-formal-feedback-period-on-vote-centers-for-monroe-county/) of public hearing in Monroe County for vote center adoption  
