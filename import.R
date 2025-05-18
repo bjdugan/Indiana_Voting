@@ -52,8 +52,8 @@ reg_turnout <- tibble(pdf = dir("data", pattern = "Turnout", full.names = TRUE))
            map(paste, collapse = "") |>  # combine multiple pages into one
            str_split("\n"),
          pres_election_year = if_else(election_year %in% pres_election_years, 
-                                      "Presidential election", 
-                                      "Mid-term election")) |> 
+                                      "Presidential elections", 
+                                      "Mid-term elections")) |> 
   arrange(election_year)
 
 # having some familiarity with the table will help. Generally,
@@ -171,7 +171,7 @@ reg_turnout18 <- mutate(
 
 reg_turnout <- bind_rows(reg_turnout, reg_turnout18) |> 
   arrange(election_year) |> 
-  select(-cn, -pdf, -election_type, election_year2) |> 
+  select(-cn, -pdf, -election_type, -election_year2) |> 
   unnest(data) |> 
   mutate(across(registered:voting_absentee_rate, as.integer))
 

@@ -2,6 +2,7 @@
 *.txt
 articles/
 eda.qmd
+eda_files/
 
 # History files
 .Rhistory
