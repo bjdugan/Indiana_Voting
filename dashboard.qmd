@@ -1,0 +1,76 @@
+---
+title: "Indiana Vote Center Adoption"
+format: 
+  dashboard:
+    nav-buttons:
+      - icon: github
+        href: https://github.com/bjdugan/Indiana_Voting
+        aria-label: GitHub
+      - icon: linkedin
+        href: https://linkedin.com/in/bjdugan
+        aria-label: LinkedIn
+    orientation: rows
+    
+---
+
+```{r setup, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+#library(gganimate) # asks for gifski for gif or av for video
+library(tidyr)
+library(readr)
+library(purrr)
+library(stringr)
+library(knitr)
+library(kableExtra)
+library(broom)
+
+# to do
+# decide on adoption_status and add it to import
+# consider density/rurality? peer counties?
+# for dashboard, pull stuff from in-person voting section
+
+# clean up stuff? this is jsut my eda
+
+# this might require more attention; omit package call if using more often (doubtful)
+IN_counties <- sf::st_read("data/IN_counties.geojson", quiet = TRUE)
+
+# set some to factors
+reg_turnout <- read_csv("data/registration_turnout2010-2024.csv", show_col_types = FALSE) |> 
+  mutate(pres_election_year = factor(pres_election_year))
+
+# keep totals separate
+reg_turnout_totals <- filter(reg_turnout, county == "Total")
+
+reg_turnout <- filter(reg_turnout, county != "Total")
+
+vote_centers <- read_csv("data/vote_center_adoption.csv", show_col_types = FALSE)
+
+county_types <- read_csv("data/county_types.csv", show_col_types = FALSE)
+
+
+```
+
+<!-- L1 headers for pages, l2 headers for rows or columns, or .tabset in l2 header
+content appearing before the first header appears...?
+-->
+# Public Comment
+**Submission for Public Comment on Vote Centers in Monroe County, Indiana**
+I am writing in support of the Vote Center Study Committee's [recommendation](https://bloomdocs.org/wp-content/uploads/simple-file-list/2025-03-06-VCSC-Report-Final-Draft-7_4-Apdx2.pdf?ref=bsquarebulletin.com) to increase early in-person voting, and with some reservations to replace precinct-based polling locations throughout Monroe County with vote centers. I have lived in Monroe County for nearly a decade and worked as both an Election Clerk (2020) and Election Judge (2024) and am grateful for the support and integrity the County provides with regard to elections.  
+
+Using publicly available summary [data](https://www.in.gov/sos/elections/voter-information/register-to-vote/voter-registration-and-turnout-statistics/) from the Indiana Secretary of State office spanning each presidential and mid-term election since 2010, I have found that  
+ - The shift to vote centers among Indiana counties coincides with an *increase* in *absentee voting* (including early in-person, by-mail, etc.) but **not in general turnout**, suggesting that - all other things being equal - there is little basis for the argument that residents would take advantage of being able to vote wherever they please on Election Day so much as having more time and days to vote;  
+ - In Monroe county in particular, the number of voters casting votes in presidential and mid-term elections has remained relatively consistent (about 60,000 in presidential election years) since 2010 despite the number of registered voters changing from a high of 112,000 in 2016 to 93,000 in 2024; i.e., there is possibly a set of motivated voters who vote in each election and would vote regardless of vote center adoption;  
+
+The Committee's recommendation to open three additional early voting centers is laudable and welcome. I have taken advantage of early voting and personally believe it effectively alleviates concerns about precinct-based Election Day voting (e.g. someone arrives too late at the wrong location or someone cannot take time to vote).
+
+This may all become moot as the result of [House Bill 1633](https://iga.in.gov/legislative/2025/bills/house/1633/details), which charges the Secretary of State to report on scheduling and feasibility of vote centers by early November, 2025, but the argument that vote center adoption makes it easier for people to vote in general does not appear to be supported by counties that have made the switch. Perhaps fine-grain data from other counties would paint a different picture.
+
+Data and code available here: [https://github.com/bjdugan/Indiana_Voting](https://github.com/bjdugan/Indiana_Voting)
+
+# Page 1
+forthcoming
+
+# Page 2
+forthcoming

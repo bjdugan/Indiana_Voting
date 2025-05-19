@@ -10,7 +10,7 @@ This project contains several R files and datasets:
  - **county_types.csv** (Not currently used) data from the US Department of Agriculture's Economic Research Service that describe counties based on prevalent industry and a variety of sociodemographic factors.  
  
 ## Background
-In 2024, Monroe County, Indiana, began a study to evaluate the costs and logistics of adopting vote centers within the county and seeks public feedback through May 19th, 2025. In late April, 2025, Indiana Governor Mike Braun signed legislation that may eventually result in all Indiana counties adopting vote centers. This project explores publicly available voter data and claims regarding improved access. 
+In 2024, Monroe County, Indiana, began a study to evaluate the costs and logistics of adopting vote centers within the county and seeks public feedback through May 19th, 2025. In late April, 2025, Indiana Governor Mike Braun signed legislation that may eventually result in all Indiana counties adopting vote centers. This project uses publicly available voter data to explore trends and claims regarding improved access. 
 
 ## Sources
 ### Data
