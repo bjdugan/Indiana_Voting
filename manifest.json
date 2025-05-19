@@ -1,7 +1,7 @@
 {
   "version": 1,
   "locale": "en_US",
-  "platform": "4.5.0",
+  "platform": "4.4.3",
   "metadata": {
     "appmode": "quarto-static",
     "primary_rmd": "dashboard.qmd",
