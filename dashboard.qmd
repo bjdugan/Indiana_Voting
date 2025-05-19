@@ -19,12 +19,13 @@ library(ggplot2)
 library(plotly)
 #library(gganimate) # asks for gifski for gif or av for video
 library(tidyr)
-library(readr)
 library(purrr)
+library(readr)
 library(stringr)
 library(knitr)
 library(kableExtra)
 library(broom)
+library(DT)
 
 # to do
 # decide on adoption_status and add it to import
@@ -47,21 +48,179 @@ reg_turnout <- filter(reg_turnout, county != "Total")
 
 vote_centers <- read_csv("data/vote_center_adoption.csv", show_col_types = FALSE)
 
-county_types <- read_csv("data/county_types.csv", show_col_types = FALSE)
-
-
+voting_stats <- left_join(reg_turnout, vote_centers, by = "county") |> 
+  mutate(adoption_status = if_else(election_year >= replace_na(adoption_year, 2025),
+                                   "Vote Center", "Precinct-based") |> 
+           factor()) |> 
+  filter(!(county == "Decatur" & election_year == 2022)) |> 
+  select(election_year, adoption_year, adoption_status, contains("rate")) |> 
+  pivot_longer(contains("rate")) |> 
+  rename(x = value, y = adoption_status) |>
+  nest(data = c(x, y), .by = c(election_year, name)) |> 
+  mutate(t_test =
+           map(data, 
+               \(x) broom::tidy(t.test(x ~ y, 
+                                       data = x, 
+                                       var.equal = FALSE,
+                                       # default is 2-sided but specific argument here is that Vote Center will be higher;
+                                       # but since estimate1 is precinct, we're testing that it's lower; else we could just refactor
+                                       alternative = "less"))),
+         n_vote_centers = map(data, filter, y == "Vote Center") |> 
+           map_int(nrow),
+         .by = c(election_year, name)
+  ) |> 
+  unnest(t_test) |> 
+  mutate(stars = case_when(
+    p.value < .001 ~ "***", 
+    p.value < .01 ~ "**",
+    p.value < .05 ~ "*",
+    TRUE ~ "")) |> 
+  select(-data)
 ```
 
-<!-- L1 headers for pages, l2 headers for rows or columns, or .tabset in l2 header
-content appearing before the first header appears...?
--->
+# Vote Centers and Turnout
+
+## Row 1 {height=20%}
+```{r}
+#| content: valuebox
+list(
+  title = "Indiana counties with vote centers",
+  icon = "arrow-up-right", 
+  value = nrow(vote_centers), 
+  color = "light"
+  )
+```
+
+```{r}
+#| content: valuebox
+list(
+  title = "Vote center impact (absentee, '24)",
+  icon = "mailbox-flag", 
+  value = paste0("+", 
+                filter(voting_stats, name == "voting_absentee_rate" & 
+                   election_year == 2024) |> 
+                  pull(estimate) |> 
+                  (\(x) x * -1)() |> 
+                  round(), 
+                "%"),
+  color = "light"
+  )
+```
+
+```{r}
+#| content: valuebox
+list(
+  title = "Vote center impact (overall turnout, '24)",
+  icon = "arrows", 
+  value = paste0(
+                filter(voting_stats, name == "turnout_rate" & 
+                   election_year == 2024) |> 
+                  pull(estimate) |> 
+                  (\(x) x * -1)() |> 
+                  round(), 
+                "%"),
+  color = "light"
+  )
+```
+
+## Row 2 {height=50%}
+```{r}
+#| title: The majority of Indiana counties have adopted vote centers
+x <- left_join(reg_turnout, vote_centers, by = "county") |> 
+  mutate(adoption_status = if_else(election_year >= replace_na(adoption_year, 2025),
+                                   "Vote Center", "Precinct-based"), 
+         Monroe = if_else(county == "Monroe", "Monroe", "Other counties")) |> 
+  filter(!(county == "Decatur" & election_year == 2022)) 
+
+p <- ggplot(x,
+            aes(x = election_year, y = turnout_rate, group = county, 
+                color = adoption_status)) +
+  geom_line(alpha = .3) + 
+  geom_jitter(aes(shape = Monroe), width = .025, height = .025,
+              show.legend = FALSE) + 
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_y_continuous(limits = c(0, 100)) + 
+  scale_x_continuous(limits = c(2009L, 2025L), 
+                     breaks = seq(2008, 2024, by = 4)) +
+  scale_color_manual(values = c("Vote Center" = "#ef8a62", 
+                                "Precinct-based" = "#67a9cf")) +
+  labs(x = "Election year", 
+       y = "Turnout rate", 
+       title = "Indiana County General Turnout Rate, 2010-2024, by adoption status",
+       subtitle = "Monroe County highlighted",
+       caption = "Decatur county (2022) excluded for odd values"
+  )
+ggplotly(p)
+```
+
+## Row 3 {height=30%}
+```{r}
+#| title: Vote center adoption coincides with higher absentee voting rates, not general turnout
+
+s <- seq(-5, 25, by = 5) / 100
+v <- c("#f7fcf5", "#e5f5e0", "#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", 
+       "#238b45", "#005a32")
+
+arrange(voting_stats, desc(election_year)) |> 
+  mutate(name = if_else(grepl("turnout_rate", name),
+                        "General Turnout", 
+                        "Absentee Turnout"),
+         across(contains("estimate"), \(x) x / 100),
+         estimate = -1*estimate) |> 
+  select(`Election Year` = election_year, Metric = name, 
+         `No. Vote Centers` = n_vote_centers, `Precinct-based` = estimate1, 
+         `Vote Center` = estimate2, Difference = estimate, Sig. = stars) |> 
+  datatable(
+    caption = "Impact of vote center adoption on turnout, absentee turnout, 2010-2024") |> 
+  formatPercentage(columns = 4:6) |> 
+  formatStyle(columns = 6,
+              backgroundColor = styleInterval(cuts = s, values = v))
+```
+
+# Data {scrolling="false"}
+
+Get all the source and compiled data used for this dashboard by clicking this [link](https://github.com/bjdugan/Indiana_Voting/tree/d59632c7145cabbc25b9efad9a3eee7d2379d77c/data) or the GitHub icon above.  
+ - Voter registration and turnout [statistics](https://www.in.gov/sos/elections/voter-information/register-to-vote/voter-registration-and-turnout-statistics/) tables were scraped from PDF text and compiled into tables.    
+ - Indiana Vote Center adoption [data](https://www.in.gov/sos/elections/voter-information/ways-to-vote/vote-centers/) was scraped from the web.  
+ - Spatial data was gathered from the IndianaMap [API](https://www.indianamap.org/datasets/INMap::county-boundaries-of-indiana-current/about).    
+
+Note there were a few anomolous tallies in the data. E.g. Decatur county's 2022 mid-term tallies do not add up where they should: `voting_in_person` and `voting_absentee` should equal `voting` when summed. Several others appear to be possible transcription errors, e.g., Monroe county's 2010 `voting` count shows 36,*3*33 but summing the in-person and absentee counts yields 26,193 + 10,440 = 36,*6*33.
+
+```{r}
+#| title: Explore the full data set 
+options(DT.options = list(bPaginate = TRUE,
+                          # this controls table display and options
+                          # https://datatables.net/reference/option/dom 
+                          dom = "liftBp")) 
+
+left_join(reg_turnout, vote_centers, by = "county") |> 
+  mutate(adoption_status = if_else(election_year >= replace_na(adoption_year, 2025),
+                                   "Vote Center", "Precinct-based")) |> 
+  arrange(desc(election_year), county) |>
+  datatable(fillContainer = FALSE, 
+            extensions = "Buttons",
+            options = list(buttons = c("pdf", "csv", "excel"), 
+                           pageLength = 6, # 6 looks better on half-screen
+                           lengthMenu = c(6, 24, 48) # options for more
+                           )
+  )
+```
+
+# Map
+(forthcoming)
+
+# Monroe County
+(forthcoming)
+
 # Public Comment
-**Submission for Public Comment on Vote Centers in Monroe County, Indiana**
+**Submission for Public Comment on Vote Centers in Monroe County, Indiana**  
+
 I am writing in support of the Vote Center Study Committee's [recommendation](https://bloomdocs.org/wp-content/uploads/simple-file-list/2025-03-06-VCSC-Report-Final-Draft-7_4-Apdx2.pdf?ref=bsquarebulletin.com) to increase early in-person voting, and with some reservations to replace precinct-based polling locations throughout Monroe County with vote centers. I have lived in Monroe County for nearly a decade and worked as both an Election Clerk (2020) and Election Judge (2024) and am grateful for the support and integrity the County provides with regard to elections.  
 
 Using publicly available summary [data](https://www.in.gov/sos/elections/voter-information/register-to-vote/voter-registration-and-turnout-statistics/) from the Indiana Secretary of State office spanning each presidential and mid-term election since 2010, I have found that  
- - The shift to vote centers among Indiana counties coincides with an *increase* in *absentee voting* (including early in-person, by-mail, etc.) but **not in general turnout**, suggesting that - all other things being equal - there is little basis for the argument that residents would take advantage of being able to vote wherever they please on Election Day so much as having more time and days to vote;  
- - In Monroe county in particular, the number of voters casting votes in presidential and mid-term elections has remained relatively consistent (about 60,000 in presidential election years) since 2010 despite the number of registered voters changing from a high of 112,000 in 2016 to 93,000 in 2024; i.e., there is possibly a set of motivated voters who vote in each election and would vote regardless of vote center adoption;  
+- The shift to vote centers among Indiana counties coincides with an *increase* in *absentee voting* (including early in-person, by-mail, etc.) but **not in general turnout**, suggesting that - all other things being equal - there is little basis for the argument that residents would take advantage of being able to vote wherever they please on Election Day so much as having more time and days to vote;  
+- In Monroe county in particular, the number of voters casting votes in presidential and mid-term elections has remained relatively consistent (about 60,000 in presidential election years) since 2010 despite the number of registered voters changing from a high of 112,000 in 2016 to 93,000 in 2024; i.e., there is possibly a set of motivated voters who vote in each election and would vote regardless of vote center adoption;  
 
 The Committee's recommendation to open three additional early voting centers is laudable and welcome. I have taken advantage of early voting and personally believe it effectively alleviates concerns about precinct-based Election Day voting (e.g. someone arrives too late at the wrong location or someone cannot take time to vote).
 
@@ -69,8 +228,4 @@ This may all become moot as the result of [House Bill 1633](https://iga.in.gov/l
 
 Data and code available here: [https://github.com/bjdugan/Indiana_Voting](https://github.com/bjdugan/Indiana_Voting)
 
-# Page 1
-forthcoming
 
-# Page 2
-forthcoming
