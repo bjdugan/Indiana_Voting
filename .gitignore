@@ -1,7 +1,8 @@
 # notes, copies of articles, etc.
 *.txt
 articles/
-eda.*
+eda.qmd
+eda.html
 eda_files/
 
 # History files
