@@ -226,6 +226,6 @@ The Committee's recommendation to open three additional early voting centers is 
 
 This may all become moot as the result of [House Bill 1633](https://iga.in.gov/legislative/2025/bills/house/1633/details), which charges the Secretary of State to report on scheduling and feasibility of vote centers by early November, 2025, but the argument that vote center adoption makes it easier for people to vote in general does not appear to be supported by counties that have made the switch. Perhaps fine-grain data from other counties would paint a different picture.
 
+-Brendan Dugan
+
 Data and code available here: [https://github.com/bjdugan/Indiana_Voting](https://github.com/bjdugan/Indiana_Voting)
-
-

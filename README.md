@@ -1,6 +1,8 @@
 # Indiana_Voting
 Facts, figures, and data on voting and vote center adoption in Indiana
 
+View the [dashboard](https://0196e88f-48c5-a917-025f-0c6d9f0594af.share.connect.posit.cloud/)
+
 ## Overview
 This project contains several R files and datasets:  
  - **import.R** retrieves and cleans data from sources listed below.  
