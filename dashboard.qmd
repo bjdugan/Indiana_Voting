@@ -98,7 +98,7 @@ reg_turnout_errors <- mutate(
 
 # Vote Centers and Turnout
 
-## Row 1 {height="10%"}
+## Row 1 {height="200px"}
 
 ```{r}
 #| content: valuebox
@@ -142,7 +142,7 @@ list(
 )
 ```
 
-## Row {.flow height="10%,"}
+## Row {.flow height="220px"}
 
 ::: card
 The plots in each tab below describe trends in overall voter turnout, by county and adoption status. *Click the expand icon at the bottom right of a plot to see it full-screen.*\
@@ -152,7 +152,7 @@ The plots in each tab below describe trends in overall voter turnout, by county 
 - **The table** that follows describes both the average turnout rate depicted in the first plot and the absentee turnout, which includes in-person early and mail-in voting, among counties with precinct-based vs. vote centers and whether the differences are meaningful. Counties with vote centers tend to have higher absentee turnout rates but not general turnout rates, meaning more citizens may take advantage of early or mail-in voting.
 :::
 
-## Row 2 {.tabset height="800px,"}
+## Row 2 {.tabset height="400px"}
 
 ```{r, include=FALSE}
 # replaced for being less than optimal
@@ -198,7 +198,7 @@ x <- left_join(reg_turnout, vote_centers, by = "county") |>
             .by = c(adoption_status, election_year))
 
 y <- count(vote_centers, adoption_year) |> 
-  mutate(vote_centers = cumsum(n) / 92 * 100 ) |> 
+  mutate(vote_centers = cumsum(n) / length(unique(IN_counties$name)) * 100 ) |> 
   rename(election_year = adoption_year)
 
 y <- bind_rows(
@@ -242,6 +242,9 @@ ggplotly(p)
 
 ```{r turnout_pres}
 #| title: Presidential Elections
+#| fig-width: 40
+#| fig-height: 90
+
 x <- left_join(reg_turnout, vote_centers, by = "county") |> 
   filter(pres_election_year == "Presidential elections") |> 
   mutate(adoption_status = if_else(election_year >= replace_na(adoption_year, 2025),
@@ -259,7 +262,9 @@ p <- ggplot(x,
                 alpha = turnout_rate)) +
   geom_tile() + 
   theme_minimal() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom", 
+        line = element_blank()
+        ) +
   scale_x_continuous(breaks = seq(2012, 2024, by = 4)) +
   scale_alpha_continuous(range = c(0, 1)) + 
   scale_fill_manual(values = c("Vote Center" = "#ef8a62", 
@@ -274,6 +279,9 @@ ggplotly(p)
 
 ```{r turnout_midterm}
 #| title: Mid-term Elections
+#| fig-width: 40
+#| fig-height: 90
+
 x <- left_join(reg_turnout, vote_centers, by = "county") |> 
   filter(pres_election_year == "Mid-term elections") |> 
   mutate(adoption_status = if_else(election_year >= replace_na(adoption_year, 2025),
@@ -290,7 +298,8 @@ p <- ggplot(x,
                 alpha = turnout_rate)) +
   geom_tile() + 
   theme_minimal() +
-  theme(legend.position = "bottom") +
+  theme(legend.position = "bottom", 
+        line = element_blank()) +
   scale_x_continuous(breaks = seq(2010, 2022, by = 4)) +
   scale_alpha_continuous(range = c(0, 1)) + 
   scale_fill_manual(values = c("Vote Center" = "#ef8a62", 
@@ -303,7 +312,7 @@ p <- ggplot(x,
 ggplotly(p)
 ```
 
-## Row 3 {height="20%"}
+## Row 3 {height="300px"}
 
 ```{r table}
 s <- seq(-5, 25, by = 5) / 100
@@ -318,12 +327,18 @@ arrange(voting_stats, desc(election_year)) |>
          estimate = -1 * estimate) |> 
   select(`Election Year` = election_year, Metric = name, 
          `No. Vote Centers` = n_vote_centers, `Precinct-based` = estimate1, 
-         `Vote Center` = estimate2, Difference = estimate, Sig. = stars) |> 
-  datatable(
-    caption = "Impact of vote center adoption on turnout, absentee turnout, 2010-2024") |> 
+         `Vote Center` = estimate2, Difference = estimate) |> 
+  datatable(fillContainer = FALSE, 
+            extensions = "Buttons",
+            options = list(buttons = c("pdf", "csv", "excel"), 
+                           pageLength = 4, 
+                           lengthMenu = c(4, 8, 16))
+            ) |> 
   formatPercentage(columns = 4:6) |> 
   formatStyle(columns = 6,
               backgroundColor = styleInterval(cuts = s, values = v))
+
+
 ```
 
 
@@ -343,7 +358,7 @@ While most potential errors are relatively small, a few stand out. Decatur count
 
 Ohio county's 2014 tallies may have substituted Election Day voting (`r format(filter(reg_turnout_errors, county == "Ohio")$voting_in_person, big.mark = ",")`) and voting totals (`r format(filter(reg_turnout_errors, county == "Ohio")$voting, big.mark = ",")`), as the in-person voting well exceeds the total number of votes. However, it is unclear where the 4,087 figure came from, as that would imply a very high general turnout of `r round(filter(reg_turnout_errors, county == "Ohio")$voting_in_person / filter(reg_turnout_errors, county == "Ohio")$registered * 100)`%. For context, the highest reported turnout is tied between `r paste(filter(reg_turnout, turnout_rate == max(turnout_rate))$county, collapse = " and ")` counties' `r unique(filter(reg_turnout, turnout_rate == max(turnout_rate))$election_year)` elections at `r  mean(filter(reg_turnout, turnout_rate == max(turnout_rate))$turnout_rate)`%.
 
-
+## Row height {height="%"}
 ```{r}
 s <- seq(-200, 25, 25) / 100
 
@@ -377,6 +392,7 @@ Find all the source and compiled data used for this dashboard by clicking this [
 - Spatial data were gathered from the IndianaMap [API](https://www.indianamap.org/datasets/INMap::county-boundaries-of-indiana-current/about).
 
 **Data glossary**
+
  - `election_year`: Election year. Extracted from PDFs.  
  - `county`: Name of the county. Extracted from PDFs.  
  - `registered`: The number of registered voters in a county. Extracted from PDFs.  
